@@ -711,23 +711,21 @@ func (s *Server) handleToolCalls(ctx context.Context, req *transport.BaseJSONRPC
 	return toolToUse.Handler(ctx, params), nil
 }
 func (s *Server) generateCapabilities() ServerCapabilities {
+      t := true
       return ServerCapabilities{
           Tools: func() *ServerCapabilitiesTools {
-              hasTools := len(s.tools) > 0
               return &ServerCapabilitiesTools{
-                  ListChanged: &hasTools,
+                  ListChanged: &t,
               }
           }(),
           Prompts: func() *ServerCapabilitiesPrompts {
-              hasPrompts := len(s.prompts) > 0
               return &ServerCapabilitiesPrompts{
-                  ListChanged: &hasPrompts,
+                  ListChanged: &t,
               }
           }(),
           Resources: func() *ServerCapabilitiesResources {
-              hasResources := len(s.resources) > 0
               return &ServerCapabilitiesResources{
-                  ListChanged: &hasResources,
+                  ListChanged: &t,
               }
           }(),
       }
