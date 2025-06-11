@@ -711,24 +711,26 @@ func (s *Server) handleToolCalls(ctx context.Context, req *transport.BaseJSONRPC
 	return toolToUse.Handler(ctx, params), nil
 }
 func (s *Server) generateCapabilities() ServerCapabilities {
-	t := false
-	return ServerCapabilities{
-		Tools: func() *ServerCapabilitiesTools {
-			return &ServerCapabilitiesTools{
-				ListChanged: &t,
-			}
-		}(),
-		Prompts: func() *ServerCapabilitiesPrompts {
-			return &ServerCapabilitiesPrompts{
-				ListChanged: &t,
-			}
-		}(),
-		Resources: func() *ServerCapabilitiesResources {
-			return &ServerCapabilitiesResources{
-				ListChanged: &t,
-			}
-		}(),
-	}
+      return ServerCapabilities{
+          Tools: func() *ServerCapabilitiesTools {
+              hasTools := len(s.tools) > 0
+              return &ServerCapabilitiesTools{
+                  ListChanged: &hasTools,
+              }
+          }(),
+          Prompts: func() *ServerCapabilitiesPrompts {
+              hasPrompts := len(s.prompts) > 0
+              return &ServerCapabilitiesPrompts{
+                  ListChanged: &hasPrompts,
+              }
+          }(),
+          Resources: func() *ServerCapabilitiesResources {
+              hasResources := len(s.resources) > 0
+              return &ServerCapabilitiesResources{
+                  ListChanged: &hasResources,
+              }
+          }(),
+      }
 }
 func (s *Server) handleListPrompts(ctx context.Context, request *transport.BaseJSONRPCRequest, extra protocol.RequestHandlerExtra) (transport.JsonRpcBody, error) {
 	type promptRequestParams struct {
